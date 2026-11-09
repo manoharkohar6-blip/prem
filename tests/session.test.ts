@@ -22,6 +22,13 @@ function use(session: GameSession, objectiveId: string) {
   return session.interact();
 }
 
+function dropAll(session: GameSession): void {
+  const slots = session.inventory.snapshot();
+  for (let slot = 0; slot < slots.length; slot += 1) {
+    if (slots[slot]) expect(session.dropItem(slot).ok).toBe(true);
+  }
+}
+
 function catchOnce(session: GameSession): void {
   const granny = session.hunters.get('granny');
   if (!granny) throw new Error('level has no granny');
@@ -154,9 +161,10 @@ describe('full four-level escape', () => {
     expect(use(session, 'vent').ok).toBe(true);
     expect(session.inventory.has('crowbar')).toBe(true);
 
-    // The satchel only holds three items, so the crowbar must go before the fuses.
-    session.dropItem(0);
+    // The satchel only holds three items, so the tools must go before the fuses.
+    dropAll(session);
     expect(session.inventory.has('crowbar')).toBe(false);
+    expect(session.inventory.size).toBe(0);
     expect(take(session, 'fuseRed').ok).toBe(true);
     expect(take(session, 'fuseGreen').ok).toBe(true);
     expect(take(session, 'fuseBlue').ok).toBe(true);
