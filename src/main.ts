@@ -287,6 +287,7 @@ class AsylumGame {
   private onResize(): void {
     const width = window.innerWidth;
     const height = window.innerHeight;
+    this.backdropDirty = true;
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
