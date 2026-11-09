@@ -445,3 +445,10 @@ body {
 .hud.danger .slot {
   border-color: rgba(195, 58, 44, 0.35);
 }
+
+/* The start button stays inert until the first frame is on screen. */
+.btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+  letter-spacing: 0.12em;
+}
