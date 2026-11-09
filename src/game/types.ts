@@ -60,6 +60,8 @@ export interface ObjectiveSpec {
 export interface LevelSpec {
   index: number;
   name: string;
+  /** Compact label for the HUD, where the full title would be cramped. */
+  shortName?: string;
   subtitle: string;
   theme: ThemeId;
   brief: string[];
