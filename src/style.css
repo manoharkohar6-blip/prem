@@ -436,3 +436,12 @@ body {
     display: none;
   }
 }
+
+.hud.danger .crosshair {
+  background: var(--blood-bright);
+  box-shadow: 0 0 12px rgba(195, 58, 44, 0.8);
+}
+
+.hud.danger .slot {
+  border-color: rgba(195, 58, 44, 0.35);
+}
