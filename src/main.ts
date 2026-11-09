@@ -50,6 +50,7 @@ class AsylumGame {
   private time = 0;
   private lastRender = 0;
   private frameCost = 16;
+  private backdropDirty = true;
   private ready = false;
   private startButton: HTMLButtonElement | null = null;
   private startLabel = 'Enter the asylum';
@@ -95,6 +96,7 @@ class AsylumGame {
 
   private setPhase(phase: Phase): void {
     this.phase = phase;
+    this.backdropDirty = true;
     document.body.dataset.phase = phase;
     document.body.dataset.level = String(this.session.levelIndex + 1);
   }
