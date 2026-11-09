@@ -1,0 +1,14 @@
+{
+  "name": "echoes-of-the-asylum",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Echoes of the Asylum: Granny & Mundiya - first-person 3D psychological horror survival game",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}
