@@ -4,6 +4,7 @@ import { ITEMS, itemName, itemNames } from './items';
 import { layoutLevel, type LevelLayout, type PlacedObjective, type WorldItem } from './layout';
 import { LEVELS, MAX_DAYS } from './levels';
 import { generateMap, worldToCell, type GameMap } from './mapgen';
+import { canStandAt } from './nav';
 import { hashSeed, mulberry32, type Rng } from './rng';
 import type { HunterId, ItemId, LevelSpec, ObjectiveKind, RunStatus, Vec2 } from './types';
 import { clamp, distance } from './vec';
@@ -361,7 +362,6 @@ export class GameSession {
   private slide(delta: Vec2, target: Vec2): Vec2 {
     let x = this.player.pos.x;
     let y = this.player.pos.y;
-    const { canStandAt } = requireNav();
     if (canStandAt(this.map, { x: target.x, y: this.player.pos.y }, PLAYER_RADIUS)) x = target.x;
     if (canStandAt(this.map, { x, y: this.player.pos.y + delta.y }, PLAYER_RADIUS)) y = this.player.pos.y + delta.y;
     return { x, y };
@@ -566,10 +566,3 @@ export class GameSession {
     return { ok: false, kind: 'blocked', message };
   }
 }
-
-// Kept as a tiny indirection so the class body stays readable above.
-function requireNav() {
-  return { canStandAt };
-}
-
-import { canStandAt } from './nav';
