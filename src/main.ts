@@ -306,9 +306,14 @@ class AsylumGame {
     // until the frame budget recovers. Fast GPUs keep a smooth animated menu.
     if (this.phase !== 'playing' && this.phase !== 'caught') {
       const now = performance.now();
+      // A very slow renderer cannot keep an animated backdrop and still respond to
+      // input, so once a frame proves expensive the panel backdrop only redraws
+      // when something actually changes. Fast GPUs keep the full animated menu.
+      if (this.ready && this.frameCost > 120 && !this.backdropDirty) return;
       const interval = this.frameCost > 30 ? 480 : 0;
       if (this.ready && interval > 0 && now - this.lastRender < interval) return;
       this.lastRender = now;
+      this.backdropDirty = false;
     }
     const started = performance.now();
     this.render(dt);
