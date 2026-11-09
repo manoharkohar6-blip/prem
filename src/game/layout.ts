@@ -59,11 +59,17 @@ export function layoutLevel(level: LevelSpec, map: GameMap, daySeed: number): Le
   for (const spec of level.objectives) {
     if (spec.id === exitSpec.id) continue;
     const room = nextRoom();
-    objectives.push({ spec, pos: pointInRoom(rng, room), roomId: room.id });
+    // Fixtures are anchored to room centres so they never move on a reshuffle.
+    objectives.push({ spec, pos: roomCenterWorld(room), roomId: room.id });
   }
 
   const items: WorldItem[] = level.items.map((item, index) => {
-    const room = nextRoom();
+    let room = pool[Math.floor(rng() * pool.length)] ?? map.rooms[0];
+    let guard = 0;
+    while (guard < 12 && distance(roomCenterWorld(room), start) < 9) {
+      room = pool[Math.floor(rng() * pool.length)] ?? map.rooms[0];
+      guard += 1;
+    }
     return {
       id: `${level.index}-${item}-${index}`,
       item,
