@@ -48,8 +48,6 @@ class AsylumGame {
   private pointerLocked = false;
   private everLocked = false;
   private time = 0;
-  private lastRender = 0;
-  private frameCost = 16;
   private backdropDirty = true;
   private ready = false;
   private startButton: HTMLButtonElement | null = null;
