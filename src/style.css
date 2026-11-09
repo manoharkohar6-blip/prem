@@ -452,3 +452,8 @@ body {
   cursor: progress;
   letter-spacing: 0.12em;
 }
+
+/* Level titles are proper nouns, so they keep their own capitalisation. */
+#brief-title {
+  text-transform: none;
+}
