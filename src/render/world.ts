@@ -163,14 +163,17 @@ export class World {
     this.flashlight.intensity = on ? 30 : 0;
   }
 
-  sync(session: GameSession, dt: number): void {
+  /** `dread` (0..1) is Mundiya's proximity: the lights stutter and dim. */
+  sync(session: GameSession, dt: number, dread = 0): void {
     this.time += dt;
     const flicker = 0.82 + Math.sin(this.time * 13.7) * 0.06 + Math.sin(this.time * 31.1) * 0.04;
+    const stutter = Math.sin(this.time * (14 + dread * 46)) > 0.88 - dread * 0.5 ? 0.22 : 1;
+    const dim = 1 - dread * 0.45;
 
     for (const node of this.lightNodes) {
       const wobble = 0.7 + 0.3 * Math.sin(this.time * (3 + node.phase) + node.phase * 7);
-      node.light.intensity = node.base * wobble * flicker;
-      if (node.coneMaterial) node.coneMaterial.opacity = 0.028 + 0.03 * wobble;
+      node.light.intensity = node.base * wobble * flicker * stutter * dim;
+      if (node.coneMaterial) node.coneMaterial.opacity = (0.028 + 0.03 * wobble) * dim * stutter;
     }
 
     if (this.flashlight.intensity > 0) {

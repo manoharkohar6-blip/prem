@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#08090a" />
+    <meta
+      name="description"
+      content="Echoes of the Asylum: Granny & Mundiya — a first-person 3D psychological horror survival game across five days and four levels."
+    />
+    <title>Echoes of the Asylum: Granny &amp; Mundiya</title>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene" aria-label="Asylum view"></canvas>
+
+      <div id="hud" class="hud hidden" aria-live="polite">
+        <div class="hud-top">
+          <div class="hud-block">
+            <p class="hud-label">Day</p>
+            <p class="hud-value"><span id="day">1</span><span class="hud-dim"> / <span id="days-max">5</span></span></p>
+            <p class="hud-sub">Security <span id="security">1</span></p>
+          </div>
+          <div class="hud-block hud-block--right">
+            <p class="hud-label" id="level-sub">Level I</p>
+            <p class="hud-level" id="level-name">The Basement</p>
+          </div>
+        </div>
+
+        <div class="hud-objectives">
+          <p class="hud-label">Objectives</p>
+          <ul id="objectives"></ul>
+        </div>
+
+        <div id="crosshair" class="crosshair" aria-hidden="true"></div>
+        <div id="toasts" class="toasts" aria-live="assertive"></div>
+        <div id="prompt" class="prompt hidden"></div>
+
+        <div class="hud-bottom">
+          <div class="hud-inventory">
+            <p class="hud-label">Satchel <span class="hud-dim">(3 slots · 1-3 drop)</span></p>
+            <div id="inventory" class="slots"></div>
+          </div>
+          <div class="hud-stamina">
+            <p class="hud-label">Breath</p>
+            <div class="bar"><div id="stamina-fill" class="bar-fill"></div></div>
+          </div>
+        </div>
+
+        <div id="help" class="help">
+          <p><b>WASD</b> move · <b>Mouse</b> look · <b>Shift</b> sprint · <b>Ctrl</b> crouch</p>
+          <p><b>E</b> interact · <b>F</b> flashlight · <b>T</b> set trap · <b>1-3</b> drop · <b>M</b> mute · <b>Esc</b> pause</p>
+        </div>
+      </div>
+
+      <div id="overlay" class="overlay">
+        <section id="panel-start" class="panel panel--start">
+          <p class="eyebrow">A first-person survival horror</p>
+          <h1>Echoes of the Asylum</h1>
+          <h2>Granny &amp; Mundiya</h2>
+          <p class="lede">
+            Four levels. Two hunters. Five days. Every time they catch you, the asylum
+            rearranges itself and locks down tighter.
+          </p>
+          <ul class="rules">
+            <li><b>5 days.</b> Each capture burns a day, shuffles every item and raises security.</li>
+            <li><b>3-slot satchel.</b> Keys, tools, fuses and relics all compete for the same hands.</li>
+            <li><b>Granny</b> patrols and hunts by sound. Sprint, drop something, creak a floorboard — she comes.</li>
+            <li><b>Mundiya</b> is silent, walks through walls, and follows your light.</li>
+          </ul>
+          <button id="btn-start" class="btn" type="button">Enter the asylum</button>
+          <p class="hint">Headphones recommended. Click to lock the mouse; press Esc to pause.</p>
+        </section>
+
+        <section id="panel-briefing" class="panel hidden">
+          <p class="eyebrow" id="brief-subtitle">Level I</p>
+          <h2 id="brief-title">The Basement &amp; Quarantine Wards</h2>
+          <ul id="brief-list" class="brief-list"></ul>
+          <p class="hint" id="brief-day">Day 1 of 5 · Security 1</p>
+          <button id="btn-begin" class="btn" type="button">Begin</button>
+        </section>
+
+        <section id="panel-caught" class="panel panel--caught hidden">
+          <p class="eyebrow" id="caught-eyebrow">Caught</p>
+          <h2 id="caught-title">Granny found you.</h2>
+          <p id="caught-text"></p>
+        </section>
+
+        <section id="panel-end" class="panel hidden">
+          <p class="eyebrow" id="end-eyebrow">Run over</p>
+          <h2 id="end-title">The asylum keeps you.</h2>
+          <p id="end-text"></p>
+          <button id="btn-restart" class="btn" type="button">Try again</button>
+        </section>
+
+        <section id="panel-pause" class="panel hidden">
+          <h2>Paused</h2>
+          <p class="hint">The dark waits. Resume when you are ready to move again.</p>
+          <button id="btn-resume" class="btn" type="button">Resume</button>
+        </section>
+
+        <section id="panel-error" class="panel hidden">
+          <h2>No WebGL</h2>
+          <p class="hint" id="error-text">
+            This browser could not create a WebGL context, so the asylum cannot be rendered.
+          </p>
+        </section>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
