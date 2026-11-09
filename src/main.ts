@@ -49,6 +49,7 @@ class AsylumGame {
   private everLocked = false;
   private time = 0;
   private lastRender = 0;
+  private frameCost = 16;
   private ready = false;
   private startButton: HTMLButtonElement | null = null;
   private startLabel = 'Enter the asylum';
@@ -297,14 +298,19 @@ class AsylumGame {
     const dt = Math.min(this.clock.getDelta(), 0.05);
     this.time += dt;
     this.update(dt);
-    // With a full-screen panel up the scene is mostly hidden, so cap the frame
-    // rate. It keeps menus responsive on weak or software-rendered GPUs.
+    // Behind a full-screen panel the scene is mostly hidden. On a slow renderer
+    // (software WebGL or a weak integrated GPU) full-cost frames starve the main
+    // thread and the menu stops reacting to clicks, so the backdrop is throttled
+    // until the frame budget recovers. Fast GPUs keep a smooth animated menu.
     if (this.phase !== 'playing' && this.phase !== 'caught') {
       const now = performance.now();
-      if (this.ready && now - this.lastRender < 60) return;
+      const interval = this.frameCost > 30 ? 480 : 0;
+      if (this.ready && interval > 0 && now - this.lastRender < interval) return;
       this.lastRender = now;
     }
+    const started = performance.now();
     this.render(dt);
+    this.frameCost = this.frameCost * 0.6 + (performance.now() - started) * 0.4;
     this.enableStart();
   };
 
