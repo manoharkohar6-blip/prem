@@ -48,6 +48,10 @@ class AsylumGame {
   private pointerLocked = false;
   private everLocked = false;
   private time = 0;
+  private lastRender = 0;
+  private ready = false;
+  private startButton: HTMLButtonElement | null = null;
+  private startLabel = 'Enter the asylum';
 
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new THREE.WebGLRenderer({
@@ -82,6 +86,7 @@ class AsylumGame {
       game: this,
     };
 
+    this.prepareStartButton();
     this.loop();
   }
 
