@@ -297,8 +297,43 @@ class AsylumGame {
     const dt = Math.min(this.clock.getDelta(), 0.05);
     this.time += dt;
     this.update(dt);
+    // With a full-screen panel up the scene is mostly hidden, so cap the frame
+    // rate. It keeps menus responsive on weak or software-rendered GPUs.
+    if (this.phase !== 'playing' && this.phase !== 'caught') {
+      const now = performance.now();
+      if (this.ready && now - this.lastRender < 60) return;
+      this.lastRender = now;
+    }
     this.render(dt);
+    this.enableStart();
   };
+
+  /**
+   * The start button stays inert until the first frame is actually on screen, so
+   * a click can never land while shaders and procedural textures are compiling.
+   */
+  private prepareStartButton(): void {
+    const button = document.getElementById('btn-start') as HTMLButtonElement | null;
+    this.startButton = button;
+    if (!button) {
+      this.ready = true;
+      return;
+    }
+    this.startLabel = button.textContent?.trim() || this.startLabel;
+    button.disabled = true;
+    button.textContent = 'Preparing the asylum…';
+    // Fallback for tabs where the first animation frame never arrives.
+    window.setTimeout(() => this.enableStart(), 4000);
+  }
+
+  private enableStart(): void {
+    if (this.ready) return;
+    this.ready = true;
+    const button = this.startButton;
+    if (!button) return;
+    button.disabled = false;
+    button.textContent = this.startLabel;
+  }
 
   private update(dt: number): void {
     if (this.phase === 'playing') this.updatePlaying(dt);
