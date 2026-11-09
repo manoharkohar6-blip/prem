@@ -299,24 +299,16 @@ class AsylumGame {
     const dt = Math.min(this.clock.getDelta(), 0.05);
     this.time += dt;
     this.update(dt);
-    // Behind a full-screen panel the scene is mostly hidden. On a slow renderer
-    // (software WebGL or a weak integrated GPU) full-cost frames starve the main
-    // thread and the menu stops reacting to clicks, so the backdrop is throttled
-    // until the frame budget recovers. Fast GPUs keep a smooth animated menu.
+    // The title, briefing and pause screens cover the scene completely. Drawing a
+    // hidden 3D scene every frame only starves the main thread, which makes the
+    // DOM panels slow to react to input, so the backdrop is drawn once per change
+    // and the loop idles until gameplay starts. Full animation resumes with the
+    // first frame of play, where it actually matters.
     if (this.phase !== 'playing' && this.phase !== 'caught') {
-      const now = performance.now();
-      // A very slow renderer cannot keep an animated backdrop and still respond to
-      // input, so once a frame proves expensive the panel backdrop only redraws
-      // when something actually changes. Fast GPUs keep the full animated menu.
-      if (this.ready && this.frameCost > 120 && !this.backdropDirty) return;
-      const interval = this.frameCost > 30 ? 480 : 0;
-      if (this.ready && interval > 0 && now - this.lastRender < interval) return;
-      this.lastRender = now;
+      if (this.ready && !this.backdropDirty) return;
       this.backdropDirty = false;
     }
-    const started = performance.now();
     this.render(dt);
-    this.frameCost = this.frameCost * 0.6 + (performance.now() - started) * 0.4;
     this.enableStart();
   };
 
